@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -8,7 +9,11 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    // Ambil semua data user KECUALI akun yang sedang login saat ini
+    $users = User::where('id', '!=', auth()->id())->get();
+    
+    // Kirim data user tersebut ke halaman dashboard
+    return view('dashboard', compact('users'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -18,3 +23,8 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+use App\Http\Controllers\MessageController;
+
+// Jalur untuk ambil dan kirim pesan
+Route::get('/messages/{user}', [MessageController::class, 'fetchMessages'])->middleware('auth');
+Route::post('/messages/{user}', [MessageController::class, 'sendMessage'])->middleware('auth');
