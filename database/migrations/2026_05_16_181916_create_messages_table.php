@@ -9,10 +9,14 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+   public function up(): void
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('sender_id')->constrained('users')->onDelete('cascade'); // Pengirim pesan
+            $table->foreignId('receiver_id')->nullable()->constrained('users')->onDelete('cascade'); // Penerima (jika private)
+            $table->foreignId('group_id')->nullable()->constrained('groups')->onDelete('cascade'); // Ke grup mana (jika grup)
+            $table->text('message'); // Isi pesan chat
             $table->timestamps();
         });
     }

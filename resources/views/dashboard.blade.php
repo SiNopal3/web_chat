@@ -15,3 +15,16 @@
         </div>
     </div>
 </x-app-layout>
+<script type="module">
+        // Bergabung ke channel radar yang kita buat di backend tadi
+        window.Echo.join(`online-users`)
+            .here((users) => {
+                console.log('Orang yang sedang online saat ini:', users);
+            })
+            .joining((user) => {
+                console.log('🔴 Notif: ' + user.name + ' baru saja ONLINE!');
+            })
+            .leaving((user) => {
+                console.log('⚪ Notif: ' + user.name + ' baru saja OFFLINE.');
+            });
+    </script>
