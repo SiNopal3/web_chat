@@ -28,3 +28,11 @@ use App\Http\Controllers\MessageController;
 // Jalur untuk ambil dan kirim pesan
 Route::get('/messages/{user}', [MessageController::class, 'fetchMessages'])->middleware('auth');
 Route::post('/messages/{user}', [MessageController::class, 'sendMessage'])->middleware('auth');
+use App\Http\Controllers\GroupController;
+
+// Jalur khusus Grup Chat
+Route::get('/groups', [GroupController::class, 'index'])->middleware('auth');
+Route::post('/groups', [GroupController::class, 'store'])->middleware('auth');
+Route::post('/groups/{group}/join', [GroupController::class, 'join'])->middleware('auth');
+Route::get('/groups/{group}/messages', [GroupController::class, 'fetchMessages'])->middleware('auth');
+Route::post('/groups/{group}/messages', [GroupController::class, 'sendMessage'])->middleware('auth');

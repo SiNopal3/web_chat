@@ -46,4 +46,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Relasi ke Model Group (Laravel otomatis mengenali karena sama-sama di folder App\Models)
+    public function groups()
+    {
+        return $this->belongsToMany(\App\Models\Group::class);
+    }
 }

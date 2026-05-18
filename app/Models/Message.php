@@ -16,4 +16,8 @@ class Message extends Model
         'group_id',
         'message',
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'sender_id');
+    }
 }
