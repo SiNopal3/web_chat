@@ -2,35 +2,32 @@
 
 namespace App\Events;
 
+use App\Models\Message;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class GroupMessageSent
+class GroupMessageSent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     */
-    public function __construct()
+    public $message;
+
+    public function __construct(Message $message)
     {
-        //
+        // Menyertakan data user agar nama pengirim bisa muncul di layar teman
+        $this->message = $message->load('user');
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, Channel>
-     */
     public function broadcastOn(): array
     {
+        // Menyiarkan pesan ini khusus ke saluran grup yang tepat
         return [
-            new PrivateChannel('channel-name'),
+            new PresenceChannel('group.' . $this->message->group_id),
         ];
     }
 }

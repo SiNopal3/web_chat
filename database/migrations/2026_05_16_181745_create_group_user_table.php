@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('group_user', function (Blueprint $table) {
             $table->id();
+            
+            // DUA BARIS SAKTI INI YANG HILANG DARI TADI!
+            $table->foreignId('group_id')->constrained('groups')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            
             $table->timestamps();
         });
     }

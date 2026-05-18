@@ -3,15 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Group;
+use App\Models\Message;
+use App\Events\GroupMessageSent;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
 {
-    // Mengambil daftar semua grup
+    // Mengambil daftar grup
     public function index()
     {
-        $groups = Group::all();
-        return response()->json($groups);
+        return response()->json(Group::all());
     }
 
     // Membuat grup baru
@@ -19,49 +20,49 @@ class GroupController extends Controller
     {
         $request->validate(['name' => 'required|string|max:255']);
         
-        // Tambahkan creator_id ke dalam sini
         $group = Group::create([
             'name' => $request->name,
             'creator_id' => auth()->id() 
         ]);
         
-        // Otomatis masukkan si pembuat grup sebagai anggota pertama
+        // Otomatis masukkan si pembuat grup sebagai anggota
         $group->users()->attach(auth()->id());
 
         return response()->json($group);
     }
 
-    // Bergabung ke grup
+    // Fungsi untuk JOIN ke dalam grup saat diklik
     public function join(Group $group)
     {
-        // Cek kalau belum bergabung, baru gabungkan
+        // Cek jika user belum ada di dalam grup, maka masukkan
         if (!$group->users->contains(auth()->id())) {
             $group->users()->attach(auth()->id());
         }
-        return response()->json(['message' => 'Berhasil bergabung!']);
+        return response()->json(['message' => 'Berhasil join grup!']);
     }
 
-    // Mengambil riwayat chat khusus di dalam grup tersebut
+    // Fungsi mengambil riwayat chat grup
     public function fetchMessages(Group $group)
     {
-        // Ambil pesannya sekalian bawa data user (pengirimnya)
-        $messages = $group->messages()->with('user')->orderBy('created_at', 'asc')->get();
-        return response()->json($messages);
+        // Ambil pesan beserta data 'user' (pengirimnya) biar namanya muncul
+        return response()->json($group->messages()->with('user')->get());
     }
-    // Fungsi untuk menyimpan pesan grup dan menyiarkannya
+
+    // Fungsi mengirim pesan ke grup
     public function sendMessage(Request $request, Group $group)
     {
         $request->validate(['message' => 'required|string']);
 
         $message = Message::create([
             'sender_id' => auth()->id(),
-            'group_id' => $group->id, // Menggunakan group_id, bukan receiver_id
+            'group_id' => $group->id,
             'message' => $request->message,
+            'receiver_id' => null, // Dikosongkan karena ini chat grup
         ]);
 
-        // Siarkan pesannya ke seluruh anggota grup!
-        broadcast(new \App\Events\GroupMessageSent($message))->toOthers();
+        // Siarkan pesan grupnya lewat Reverb!
+        broadcast(new GroupMessageSent($message))->toOthers();
 
-        return response()->json($message->load('user'));
+        return response()->json($message);
     }
 }

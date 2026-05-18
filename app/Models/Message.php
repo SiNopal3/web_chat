@@ -9,15 +9,23 @@ class Message extends Model
 {
     use HasFactory;
 
-    // INI DIA KUNCI GEMBOKNYA! Mengizinkan kolom ini diisi oleh user
+    // Gembok sudah dibuka untuk semuanya
     protected $fillable = [
         'sender_id',
         'receiver_id',
         'group_id',
         'message',
     ];
+
+    // Relasi untuk memunculkan nama pengirim di Grup Chat
     public function user()
     {
         return $this->belongsTo(User::class, 'sender_id');
+    }
+
+    // Relasi ke tabel grup
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
     }
 }
