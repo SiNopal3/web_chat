@@ -1,59 +1,81 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🚀 Aplikasi Chat Real-Time (Laravel + Reverb)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi *chatting* berbasis web yang mendukung obrolan pribadi (1-on-1) dan obrolan grup secara *real-time*.
 
-## About Laravel
+## ✨ Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **🔐 Sistem Keamanan:** Registrasi dan Login akun yang aman.
+- **🟢 Radar Online/Offline:** Indikator status pengguna secara *real-time* (Presence Channel).
+- **💬 Private Chat:** Kirim pesan pribadi antar pengguna tanpa perlu *refresh* halaman.
+- **👥 Group Chat:** Buat grup baru, bergabung ke dalam grup, dan kirim obrolan massal secara *real-time*.
+- **⚡ Super Cepat:** Komunikasi data instan menggunakan **Laravel Reverb** (WebSockets) dan **Axios**.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🛠️ Teknologi yang Digunakan
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend:** Laravel 11, PHP
+- **Frontend:** Blade Templating, Tailwind CSS, JavaScript (ES6+)
+- **Database:** MySQL
+- **WebSockets:** Laravel Reverb & Laravel Echo
 
-## Learning Laravel
+## ⚙️ Persyaratan Sistem (Prerequisites)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Sebelum menjalankan aplikasi ini, pastikan komputer Anda sudah terinstal:
+- PHP 8.2 atau lebih baru
+- Composer
+- Node.js & NPM
+- MySQL (XAMPP / Laragon)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🚀 Panduan Instalasi & Menjalankan Aplikasi
 
-## Laravel Sponsors
+Ikuti langkah-langkah berikut untuk menjalankan aplikasi di komputer lokal (Localhost):
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+**1. Buka Terminal di folder project, lalu instal semua dependency:**
+```bash
+composer install
+npm install
+```
 
-### Premium Partners
+**2. Siapkan file konfigurasi:**
+Duplikat file `.env.example` menjadi `.env`.
+Buka file `.env` dan sesuaikan koneksi database Anda:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=web_chat
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+**3. Generate Application Key:**
+```bash
+php artisan key:generate
+```
 
-## Contributing
+**4. Bangun struktur Database (Migration):**
+Pastikan MySQL Anda sudah menyala, lalu jalankan:
+```bash
+php artisan migrate:fresh
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**5. Nyalakan Mesin Aplikasi (PENTING!)**
+Aplikasi ini membutuhkan **3 terminal** yang berjalan secara bersamaan agar fitur *real-time* berfungsi:
 
-## Code of Conduct
+- **Terminal 1 (Server Laravel):**
+  ```bash
+  php artisan serve
+  ```
+- **Terminal 2 (Server WebSocket Reverb):**
+  ```bash
+  php artisan reverb:start
+  ```
+- **Terminal 3 (Kompilasi Frontend/Vite):**
+  ```bash
+  npm run dev
+  ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+**6. Selesai! 🎉**
+Buka browser dan akses: `http://localhost:8000`. 
+Silakan buat 2 akun yang berbeda (bisa menggunakan mode *Incognito*) untuk menguji fitur *chat real-time*.
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
