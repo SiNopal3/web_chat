@@ -76,6 +76,6 @@ Aplikasi ini membutuhkan **3 terminal** yang berjalan secara bersamaan agar fitu
 
 **6. Selesai! 🎉**
 Buka browser dan akses: `http://localhost:8000`. 
-Silakan buat 2 akun yang berbeda (bisa menggunakan mode *Incognito*) untuk menguji fitur *chat real-time*.
+Silakan buat 2 akun atau lebih yang berbeda (bisa menggunakan mode *Incognito*) untuk menguji fitur *chat real-time*.
 
 ---
